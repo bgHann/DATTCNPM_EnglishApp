@@ -34,10 +34,10 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#fefcff] p-4">
-      <div className="w-full max-w-[420px] bg-white border border-slate-100 p-8 rounded-[2rem] shadow-xl">
+      <div className="w-full max-w-105 bg-white border border-slate-100 p-8 rounded-[2rem] shadow-xl">
         {/* Logo Icon */}
         <div className="flex justify-center mb-6">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg">
+          <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg">
             <BookOpen className="w-8 h-8 text-white" />
           </div>
         </div>
@@ -70,7 +70,7 @@ export default function Login() {
 
           <button
             type="submit"
-            className="w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-bold hover:opacity-90 transition-all"
+            className="w-full py-4 bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-xl font-bold hover:opacity-90 transition-all"
           >
             Sign In
           </button>

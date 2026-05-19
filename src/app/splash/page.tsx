@@ -56,7 +56,7 @@ export default function SplashScreen() {
                 "
             >
               <Sparkles className="w-4 h-4" />
-              Bắt đầu
+              Get Started
             </button>
           </a>
 
@@ -75,7 +75,7 @@ export default function SplashScreen() {
                   transition-all
                 "
             >
-              Đăng nhập
+              Sign In
             </button>
           </a>
         </div>

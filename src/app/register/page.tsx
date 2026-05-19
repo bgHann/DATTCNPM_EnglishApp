@@ -46,8 +46,8 @@ export default function Register() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#fefcff] p-4">
       <div className="w-full max-w-105 bg-white border border-slate-100 p-8 rounded-[2rem] shadow-xl">
-        {/* Logo Icon */}
-        <div className="flex justify-center mb-6">
+        {/* */}
+        <div className="flex justify-center mb-2">
           <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg">
             <BookOpen className="w-8 h-8 text-white" />
           </div>
@@ -71,7 +71,7 @@ export default function Register() {
           </div>
         )}
 
-        <form onSubmit={handleRegister} className="space-y-4">
+        <form onSubmit={handleRegister} className="space-y-2">
           <input
             className="w-full p-4 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-100"
             placeholder="Full Name"
