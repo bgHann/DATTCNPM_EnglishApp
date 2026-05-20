@@ -1,13 +1,16 @@
 "use client";
 import { useState } from "react";
-import { auth, googleProvider } from "@/lib/firebase";
+import { auth, db, googleProvider } from "@/lib/firebase";
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { BookOpen, CheckCircle, XCircle } from "lucide-react";
+import { updateProfile } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 
 export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState<{
     text: string;
@@ -26,7 +29,21 @@ export default function Register() {
     }
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+      await updateProfile(userCredential.user, { displayName: name });
+      await setDoc(doc(db, "users", userCredential.user.uid), {
+        name,
+        email,
+        level: 1,
+        xp: 0,
+        streak: 1,
+        avatar: "",
+        createdAt: new Date(),
+      });
       setMessage({ text: "Tài khoản đăng ký thành công!", type: "success" });
       setTimeout(() => router.push("/dashboard"), 2000);
     } catch (err: any) {
@@ -75,6 +92,7 @@ export default function Register() {
           <input
             className="w-full p-4 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-100"
             placeholder="Full Name"
+            onChange={(e) => setName(e.target.value)}
           />
           <input
             className="w-full p-4 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-100"
