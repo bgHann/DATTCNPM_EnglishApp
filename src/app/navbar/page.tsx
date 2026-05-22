@@ -1,15 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import { useAuth } from "@/context/AuthContext";
-
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import AddXPButton from "@/components/ui/AddButton";
-import { Avatar } from "radix-ui";
+import Link from "next/link"; // Dùng Link thay vì router.push
+import { usePathname } from "next/navigation"; // Để lấy URL hiện tại nhằm tô màu menu active
 
-//list nav và icon tương ứng của home Vocabulary Quiz AI Chat Pavorites Progress  tương ứng với từng màn hình
 import {
   Home,
   BookOpen,
@@ -18,7 +15,6 @@ import {
   BarChart2,
   User,
 } from "lucide-react";
-import router from "next/router";
 
 const listNav = [
   { name: "Home", icon: <Home />, path: "/dashboard" },
@@ -29,20 +25,18 @@ const listNav = [
   { name: "Progress", icon: <BarChart2 />, path: "/dashboard/progress" },
   { name: "Profile", icon: <User />, path: "/dashboard/profile" },
 ];
+
 export default function Navbar() {
   const { user } = useAuth();
-
+  const pathname = usePathname(); // Lấy đường dẫn hiện tại (Ví dụ: /dashboard/quiz)
   const [userData, setUserData] = useState<any>(null);
-
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         if (!user) return;
-
         const docRef = doc(db, "users", user.uid);
-
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
@@ -61,44 +55,54 @@ export default function Navbar() {
   }, [user]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="w-64 p-4 border-r border-gray-300">
+        Loading sidebar...
+      </div>
+    );
   }
 
   return (
-    <div className="flex h-screen">
-      {/* SIDEBAR */}
-      <div className="w-64 bg-white border-r border-gray-300 p-4">
-        {/* Avatar + Name */}
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-12 h-12 rounded-full bg-pink-300 flex items-center justify-center text-white font-bold">
-            {userData?.name?.charAt(0)}
-          </div>
-
-          <div>
-            <p className="font-bold">{userData?.name}</p>
-            <div className="    flex items-center gap-2">
-              <div className="text-sm border px-1  rounded bg-linear-to-r from-blue-300 to-pink-400 text-white font-bold">
-                {" "}
-                LV {userData?.level}
-              </div>
-              <p className="text-sm text-gray-500">XP {userData?.xp}</p>
-            </div>
-          </div>
+    // Bỏ h-screen ở bọc ngoài cùng này để tránh lỗi layout lồng nhau
+    <div className="w-64 bg-white border-r border-gray-300 p-4 flex flex-col h-screen sticky top-0">
+      {/* Avatar + Name */}
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-12 h-12 rounded-full bg-pink-300 flex items-center justify-center text-white font-bold">
+          {userData?.name?.charAt(0)}
         </div>
 
-        {/* Menu */}
-        {listNav.map((item, index) => (
-          <div
-            key={index}
-            className="p-2 rounded-2xl hover:bg-pink-200 cursor-pointer"
-            onClick={() => router.push(item.path)}
-          >
-            <div className="flex items-center gap-5 py-1 text-gray-500">
+        <div>
+          <p className="font-bold text-gray-800">{userData?.name}</p>
+          <div className="flex items-center gap-2">
+            <div className="text-xs border px-1 rounded bg-gradient-to-r from-blue-300 to-pink-400 text-white font-bold">
+              LV {userData?.level}
+            </div>
+            <p className="text-sm text-gray-500">XP {userData?.xp}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Menu */}
+      <div className="flex flex-col gap-1">
+        {listNav.map((item, index) => {
+          // Kiểm tra xem menu này có đang được kích hoạt hay không
+          const isActive = pathname === item.path;
+
+          return (
+            <Link
+              key={index}
+              href={item.path}
+              className={`flex items-center gap-5 p-3 rounded-2xl transition-all duration-200 ${
+                isActive
+                  ? "bg-pink-200 text-pink-700 font-medium" // Style khi đang chọn
+                  : "text-gray-500 hover:bg-gray-100 hover:text-gray-700" // Style mặc định
+              }`}
+            >
               {item.icon}
               <span>{item.name}</span>
-            </div>
-          </div>
-        ))}
+            </Link>
+          );
+        })}
       </div>
     </div>
   );
