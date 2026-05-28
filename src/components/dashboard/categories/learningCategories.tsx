@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import TopicCard from "./TopicCard"; // Đường dẫn đến file TopicCard của bạn
+import TopicCard from "./TopicCard";
 import { getAllTopics, Topic } from "@/lib/vocabService";
 import {
   Plane,
@@ -11,7 +11,7 @@ import {
   MessageSquare,
 } from "lucide-react";
 
-// Ánh xạ title từ Firebase sang đúng Icon của Lucide để hiển thị sinh động
+// Ánh xạ title từ Firebase sàng icon tuong ứng
 const iconMap: Record<string, any> = {
   Travel: Plane,
   Food: Utensils,
